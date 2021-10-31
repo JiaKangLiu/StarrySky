@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>粒子空间运动</title>
+		<title>STARS</title>
 <style type="text/css">
 	*{
 		padding: 0 ;
@@ -14,68 +14,52 @@ body{
 	overflow: hidden;
 }	
 </style>
+<script src="./json.js.数据"></script>
 	</head>
 	<body>
-		
 		<canvas id="Canvas" ></canvas>
-		
 		<script type="text/javascript">
 			//处理兼容问题
 			window.requestAnimationFrame = (function (){
-				
 				return window.requestAnimationFrame ||
 				        window.webkitRequestAnimationFrame ||
 				        window.mozRequestAnimationFrame ||
 				        function(callback){
 				        	window.setTimeout(callback,1000/60);
 				        };
-				
-				
 			})();
 			
 			//绘制背景函数
-			
 			function drawBg(ctxt){
-			
 			ctxt.beginPath();
 			ctxt.fillStyle ="#020215";
 			ctxt.fillRect(0,0,cW,cH);
 			ctxt.save();
-				
-			
 			}
 			
 			//随机数颜色0-255
 			function  randColor(){
-				
 				return  Math.round(Math.random()*255);
-				
 			}
 			
 			//随机构造颜色
 			function Color(){
-				
 				this.r =  randColor();
 				this.g =  randColor();
 				this.b =  randColor();
 				this.rgb="rgba("+this.r+","+this.g+","+this.b+",1)";
-				
-				
 			}
 			
 			window.onload =function (){
-				
 				var c = document.getElementById("Canvas");
-				
 				c.width = cW = window.innerWidth;
 				c.height =cH = window.innerHeight;
-				
 				var ctxt = c.getContext("2d");
 				
 				//绘制背景
-				drawBg(ctxt);
+				//drawBg(ctxt);
 				
-				//创建粒子配置
+				//创建星星
 				var Dots = {
 					
 					n: 290,
@@ -87,7 +71,7 @@ body{
 				}
 				
 				
-				//每个粒子配置
+				//每颗星星配置
 				
 				function Dot(){
 					
@@ -106,19 +90,45 @@ body{
 					
 					this.vx = (Math.random()-0.6)*3;
 					this.vy =(Math.random()-0.6)*3;
+
+					//设置星星文字
+					this.name = "";
 				}
 					//初始化
 					Dot.prototype.draw = function(){
 						
 						ctxt.beginPath();
 						ctxt.fillStyle = this.color.rgb;
-						ctxt.arc(this.x,this.y,this.radius,0,360,false);
+						
+						
+						//画星星
+						ctxt.beginPath();   
+    					//设置是个顶点的坐标，根据顶点制定路径   
+    					for (var i = 0; i < 5; i++) {   
+        					ctxt.lineTo(Math.cos((18+i*72)/180*Math.PI)*1*this.radius+this.x,   
+                        	-Math.sin((18+i*72)/180*Math.PI)*1*this.radius+this.y);   
+        					ctxt.lineTo(Math.cos((54+i*72)/180*Math.PI)*0.4*this.radius+this.x,   
+                        	-Math.sin((54+i*72)/180*Math.PI)*0.4*this.radius+this.y);   
+    					}   
+    					ctxt.closePath();   
+    					//设置边框样式以及填充颜色   
+    					ctxt.lineWidth="3";   
+    					// ctxt.fillStyle = "#F6F152";   
+    					// ctxt.strokeStyle = "#F5270B";   
+    					ctxt.fill();   
+    					// ctxt.stroke();
+
+
+						//ctxt.arc(this.x,this.y,this.radius,0,360,false);
 						ctxt.fill();
+						ctxt.fillStyle = '#fff';
+						ctxt.font = "8px Arial";
+						ctxt.fillText(this.name,this.x,this.y);
 						
 						
 					};
 					
-					//创建粒子并放入数组
+					//创建星星并放入数组
 					
 					for(var i=0; i<Dots.n; i++){
 						
@@ -127,10 +137,11 @@ body{
 						Dots.array.push(dotObj);
 						
 						Dots.radiusArr.push(dotObj.radius);
-						
+						//给星星命名
+						Dots.radiusArr.push(dotObj.name);
 					}
 					
-					//画出粒子
+					//画出星星
 					function drawDots(){
 						
 						drawBg(ctxt);
@@ -143,7 +154,7 @@ body{
 					
 					drawDots();
 					
-					//移动粒子
+					//移动星星
 					function moveDots(){
 						
 						for (var i = 0; i<Dots.n ; i++) {
@@ -156,11 +167,9 @@ body{
 									
 									dot.vx = -dot.vx;
 								} 
-								
+
 							if(dot.y<0 || dot.y>cH){
-									
 									dot.vy = -dot.vy;
-								
 							    }
 							dot.x +=dot.vx;
 							dot.y +=dot.vy;
@@ -208,7 +217,6 @@ body{
 						   	if((Math.abs(dot1.x-dot2.x)<Dots.minDis )&& 
 						   	(Math.abs(dot1.y - dot2.y)<Dots.minDis ))
 						   	{
-						   		
 						   		ctxt.lineWidth = 0.2;
 						   		ctxt.beginPath();
 						   		ctxt.strokeStyle = color;
@@ -220,46 +228,43 @@ body{
 						}
 					}
 				
-				c.onmousemove=function(e){
+					//鼠标聚焦事件
+					c.onmousemove=function(e){
 					
+						var e = window.event || e;
 					
-					var e = window.event || e;
+						var pX =e.pageX;
+						var pY = e.pageY;
 					
-					var pX =e.pageX;
-					var pY = e.pageY;
-					
-					for(var i =0;i<Dots.n;i++)
-					{
-					
-					  if(Math.abs(Dots.array[i].x-pX)<Dots.d_mouse && Math.abs(Dots.array[i].y-pY)<Dots.d_mouse )
-					  {
-				
-					var r = Dots.radiusArr[i]*3;
-					Dots.array[i].radius = r;
-					
-					}
-					else{
-												
-						Dots.array[i].radius=Dots.radiusArr[i];
-				  
-					   }
+						for(var i =0;i<Dots.n;i++)
+							{
+					  			if(Math.abs(Dots.array[i].x-pX)<Dots.d_mouse && Math.abs(Dots.array[i].y-pY)<Dots.d_mouse )
+					  			{
+									var r = Dots.radiusArr[i]*3;
+									Dots.array[i].radius = r;
+									Dots.array[i].name = jsonData[i].name;
+									
+									
+									
+								}
+								else{			
+									Dots.array[i].radius=Dots.radiusArr[i];
+									//不对以下代码做设置的话，会出现神奇的bug
+									Dots.array[i].name = "";
+					   			}
 			     	}
-		
 			
 				}
 				
 				//运动
 				function infinateMove(){
-					
 					ctxt.clearRect(0,0,cW,cH);
 					moveDots();
 					drawDots();
 					connection();
 					requestAnimationFrame(infinateMove);
-					
 				}
 					infinateMove();
-				
 			}
 	
 		</script>
