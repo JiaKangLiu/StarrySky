@@ -105,10 +105,10 @@ body{
 						ctxt.beginPath();   
     					//设置是个顶点的坐标，根据顶点制定路径   
     					for (var i = 0; i < 5; i++) {   
-        					ctxt.lineTo(Math.cos((18+i*72)/180*Math.PI)*1*this.radius+this.x,   
-                        	-Math.sin((18+i*72)/180*Math.PI)*1*this.radius+this.y);   
-        					ctxt.lineTo(Math.cos((54+i*72)/180*Math.PI)*0.4*this.radius+this.x,   
-                        	-Math.sin((54+i*72)/180*Math.PI)*0.4*this.radius+this.y);   
+        					ctxt.lineTo(Math.cos((18+i*72)/180*Math.PI)*1.5*this.radius+this.x,   
+                        	-Math.sin((18+i*72)/180*Math.PI)*1.5*this.radius+this.y);   
+        					ctxt.lineTo(Math.cos((54+i*72)/180*Math.PI)*0.6*this.radius+this.x,   
+                        	-Math.sin((54+i*72)/180*Math.PI)*0.6*this.radius+this.y);   
     					}   
     					ctxt.closePath();   
     					//设置边框样式以及填充颜色   
@@ -122,7 +122,7 @@ body{
 						//ctxt.arc(this.x,this.y,this.radius,0,360,false);
 						ctxt.fill();
 						ctxt.fillStyle = '#fff';
-						ctxt.font = "8px Arial";
+						ctxt.font = "10px Arial";
 						ctxt.fillText(this.name,this.x,this.y);
 						
 						
