@@ -3,23 +3,25 @@
 	<head>
 		<meta charset="utf-8">
 		<title>STARS</title>
-<style type="text/css">
-	*{
-		padding: 0 ;
-		margin: 0 auto;
-	}
-body{
-	height: 100%;
-	width: 100%;
-	overflow: hidden;
-}	
-</style>
-<script src="./json.js.数据"></script>
+		<style type="text/css">
+			*{
+				padding: 0 ;
+				margin: 0 auto;
+			}
+			body{
+				height: 100%;
+				width: 100%;
+				overflow: hidden;
+			}	
+		</style>
+		<!-- 定时刷新页面 -->
+		<meta http-equiv="refresh" content="20">
+		<script src="./json.js.数据"></script>
 	</head>
 	<body>
 		<canvas id="Canvas" ></canvas>
 		<script type="text/javascript">
-			//处理兼容问题
+			//处理兼容问题 
 			window.requestAnimationFrame = (function (){
 				return window.requestAnimationFrame ||
 				        window.webkitRequestAnimationFrame ||
@@ -31,10 +33,10 @@ body{
 			
 			//绘制背景函数
 			function drawBg(ctxt){
-			ctxt.beginPath();
-			ctxt.fillStyle ="#020215";
-			ctxt.fillRect(0,0,cW,cH);
-			ctxt.save();
+				ctxt.beginPath();
+				ctxt.fillStyle ="#020215";
+				ctxt.fillRect(0,0,cW,cH);
+				ctxt.save();
 			}
 			
 			//随机数颜色0-255
@@ -51,6 +53,7 @@ body{
 			}
 			
 			window.onload =function (){
+				console.time("time");
 				var c = document.getElementById("Canvas");
 				c.width = cW = window.innerWidth;
 				c.height =cH = window.innerHeight;
@@ -62,7 +65,7 @@ body{
 				//创建星星
 				var Dots = {
 					
-					n: 290,
+					n: 300,
 					minDis:40,
 					d_mouse:80,
 					array:[],
@@ -70,9 +73,7 @@ body{
 					
 				}
 				
-				
 				//每颗星星配置
-				
 				function Dot(){
 					
 					//创建随机颜色
@@ -85,7 +86,6 @@ body{
 					//设置随机半径
 					this.radius = Math.round(Math.random()*5);
 					
-					
 					//设置随机速度
 					
 					this.vx = (Math.random()-0.6)*3;
@@ -94,22 +94,22 @@ body{
 					//设置星星文字
 					this.name = "";
 				}
+
 					//初始化
 					Dot.prototype.draw = function(){
-						
 						ctxt.beginPath();
 						ctxt.fillStyle = this.color.rgb;
 						
-						
 						//画星星
 						ctxt.beginPath();   
-    					//设置是个顶点的坐标，根据顶点制定路径   
-    					for (var i = 0; i < 5; i++) {   
-        					ctxt.lineTo(Math.cos((18+i*72)/180*Math.PI)*1.5*this.radius+this.x,   
-                        	-Math.sin((18+i*72)/180*Math.PI)*1.5*this.radius+this.y);   
-        					ctxt.lineTo(Math.cos((54+i*72)/180*Math.PI)*0.6*this.radius+this.x,   
-                        	-Math.sin((54+i*72)/180*Math.PI)*0.6*this.radius+this.y);   
-    					}   
+    					//将同心圆的顶点连城线
+    					for (var i = 0; i < 5; i++) {
+        					ctxt.lineTo(Math.cos((18+i*72)/180*Math.PI)*1.5*this.radius+this.x,
+                        	-Math.sin((18+i*72)/180*Math.PI)*1.5*this.radius+this.y);
+        					ctxt.lineTo(Math.cos((54+i*72)/180*Math.PI)*0.6*this.radius+this.x,
+                        	-Math.sin((54+i*72)/180*Math.PI)*0.6*this.radius+this.y);
+    					}
+
     					ctxt.closePath();   
     					//设置边框样式以及填充颜色   
     					ctxt.lineWidth="3";   
@@ -117,7 +117,6 @@ body{
     					// ctxt.strokeStyle = "#F5270B";   
     					ctxt.fill();   
     					// ctxt.stroke();
-
 
 						//ctxt.arc(this.x,this.y,this.radius,0,360,false);
 						ctxt.fill();
@@ -152,7 +151,6 @@ body{
 						}
 					}
 					
-					drawDots();
 					
 					//移动星星
 					function moveDots(){
@@ -253,7 +251,6 @@ body{
 									Dots.array[i].name = "";
 					   			}
 			     	}
-			
 				}
 				
 				//运动
@@ -262,9 +259,12 @@ body{
 					moveDots();
 					drawDots();
 					connection();
+					//动画循环
 					requestAnimationFrame(infinateMove);
 				}
 					infinateMove();
+
+					console.timeEnd("time");
 			}
 	
 		</script>
